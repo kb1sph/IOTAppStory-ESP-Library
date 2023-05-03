@@ -75,7 +75,7 @@ bool UpdateESPClass::prepareUpdate(uint32_t upd_size, String &upd_md5, uint16_t 
                     dbSerialPrintf("SPIFFS update to large! (%d) free: %d\n", this->_upd_size, _partition->size);
                 #endif
 
-                (*this->_statusMessage) = SER_UPD_SPIFFS_TO_LARGE;
+                (*this->_statusMessage) = SER_UPD_SPIFFS_TOO_LARGE;
                 return false;
             }
         #elif defined ESP8266
@@ -85,7 +85,7 @@ bool UpdateESPClass::prepareUpdate(uint32_t upd_size, String &upd_md5, uint16_t 
                     dbSerialPrintf("SPIFFS update to large! (%d) free: %d\n", this->_upd_size, spiffsSize);
                 #endif
 
-                (*this->_statusMessage) = SER_UPD_SPIFFS_TO_LARGE;
+                (*this->_statusMessage) = SER_UPD_SPIFFS_TOO_LARGE;
                 return false;
             }
         #endif
@@ -95,7 +95,7 @@ bool UpdateESPClass::prepareUpdate(uint32_t upd_size, String &upd_md5, uint16_t 
                 dbSerialPrintf("Sketch update to large! (%d) free: %d\n", this->_upd_size, ESP.getFreeSketchSpace());
             #endif
 
-            (*this->_statusMessage) = SER_UPD_SKETCH_TO_LARGE;
+            (*this->_statusMessage) = SER_UPD_SKETCH_TOO_LARGE;
             return false;
         }
     }

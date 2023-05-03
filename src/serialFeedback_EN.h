@@ -49,7 +49,7 @@
 #define SER_CONN_SAVE_EEPROM            " Connected. Saving config to eeprom"
 #define SER_CONNECTING                  " Connecting to WiFi AP"
 #define SER_CONN_NONE_GO_CFG            "No creds or AP's available. Going into Configuration Mode\n"
-#define SER_CONN_NONE_CONTINU           "\n Continu without WiFi\n"
+#define SER_CONN_NONE_CONTINU           "\n Continue without WiFi\n"
 #define SER_CONN_LOST_RECONN            " Connection lost! Reconnecting"
 #define SER_CONNECTED                   " WiFi connected\n"
 
@@ -101,8 +101,8 @@
 #define SER_CERTIFICATE_NOT_FOUND       "Certificate Not Found!"
 #define SER_CERTIFICATE_NOT_LOADED      "Could not load Certificate!"
 
-#define SER_UPD_SPIFFS_TO_LARGE         "SPIFFS update to large!"
-#define SER_UPD_SKETCH_TO_LARGE         "Sketch update to large!"
+#define SER_UPD_SPIFFS_TOO_LARGE         "SPIFFS update too large!"
+#define SER_UPD_SKETCH_TOO_LARGE         "Sketch update too large!"
 #define SER_UPD_BEGIN_FAILED            "Update.begin failed!"
 #define SER_UPD_MD5_FAILED              "Update.setMD5 failed!"
 #define SER_UPD_WRITE_FAILED            "Update.write failed!"
