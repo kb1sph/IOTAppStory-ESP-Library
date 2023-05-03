@@ -109,6 +109,7 @@ struct FirmwareStruct {
 *//*=========================================================================*/
 enum  ModeButtonState {
     ModeButtonNoPress,          // mode button is not pressed
+    ModeButtonVeryShortPress,   // very short press - will run custom callback veryShortRelease()
     ModeButtonShortPress,       // short press - will enter in firmware update mode
     ModeButtonLongPress,        // long press - will enter in configuration mode
     ModeButtonVeryLongPress,    // very long press - won't do anything (but the app developer might want to do something)
@@ -127,6 +128,7 @@ enum  ModeButtonState {
 enum AppState {
     AppStateNoPress,            // mode button is not pressed
     AppStateWaitPress,          // mode button is pressed but not long enough for a short press
+    AppStateVeryShortPress,     // mode button is pressed for a very short time. Releasing it will run onVeryShortRelease.
     AppStateShortPress,         // mode button is pressed for a short time. Releasing it will make it go to firmware update mode.
     AppStateLongPress,          // mode button is pressed for a long time. Releasing it will make it go to config mode.
     AppStateVeryLongPress,      // mode button is pressed for a very long time. Releasing it won't do anything.
@@ -204,6 +206,8 @@ public:
 
     void onFirstBoot(THandlerFunction fn);                  // called at the end of firstBoot
     void onModeButtonNoPress(THandlerFunction fn);          // called when state is changed to idle (mode button is not pressed)
+    void onModeButtonVeryShortPress(THandlerFunction fn);   // called when state is changed to very short press
+    void onVeryShortRelease(THandlerFunction fn);           // called when button is released after a very short press
     void onModeButtonShortPress(THandlerFunction fn);       // called when state is changed to short press
     void onModeButtonLongPress(THandlerFunction fn);        // called when state is changed to long press
     void onModeButtonVeryLongPress(THandlerFunction fn);    // called when state is changed to very long press
@@ -260,6 +264,8 @@ private:
 
     THandlerFunction _firstBootCallback;
     THandlerFunction _noPressCallback;
+    THandlerFunction _veryShortPressCallback;
+    THandlerFunction _veryShortReleaseCallback;
     THandlerFunction _shortPressCallback;
     THandlerFunction _longPressCallback;
     THandlerFunction _veryLongPressCallback;

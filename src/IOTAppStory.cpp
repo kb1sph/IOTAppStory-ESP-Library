@@ -1628,6 +1628,19 @@ ModeButtonState IOTAppStory::getModeButtonState() {
             return ModeButtonNoPress;
 
         case AppStateWaitPress:
+            if(buttonTime > MODE_BUTTON_VERY_SHORT_PRESS) {
+                this->_appState = AppStateVeryShortPress;
+                if(this->_veryShortPressCallback) {
+                    this->_veryShortPressCallback();
+                }
+                continue;
+            }
+            if(!this->isModeButtonPressed()) {
+                this->_appState = AppStateNoPress;
+            }
+            return ModeButtonNoPress;
+
+        case AppStateVeryShortPress:
             if(buttonTime > MODE_BUTTON_SHORT_PRESS) {
                 this->_appState = AppStateShortPress;
                 if(this->_shortPressCallback) {
@@ -1636,9 +1649,11 @@ ModeButtonState IOTAppStory::getModeButtonState() {
                 continue;
             }
             if(!this->isModeButtonPressed()) {
-                this->_appState = AppStateNoPress;
+                if(this->_veryShortReleaseCallback) {
+                    this->_veryShortReleaseCallback();
+                continue;
             }
-            return ModeButtonNoPress;
+            return ModeButtonShortPress;
 
         case AppStateShortPress:
             if(buttonTime > MODE_BUTTON_LONG_PRESS) {
