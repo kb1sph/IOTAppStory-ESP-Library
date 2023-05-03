@@ -54,6 +54,7 @@
 
 *//*=========================================================================*/
 struct AddFieldStruct {
+    const char* fieldID;
     const char* fieldLabel;
     int length;
     char type;
@@ -175,7 +176,7 @@ public:
     void preSetWifi(const char *ssid, const char *password);
 
 
-    void addField(char* &defaultVal, const char *fieldLabel, const int length, const char type = 'L');
+    void addField(char* &defaultVal, const char *fieldID, const char *fieldLabel, const int length, const char type = 'L');
     bool eepFieldsConvertOldToNew();
     void begin(const char ea) __attribute__((deprecated));// <----- deprecated left for compatibility. This will be removed with version 3.0.0
     void begin();

@@ -853,7 +853,7 @@ bool IOTAppStory::espInstaller(Stream &streamPtr, FirmwareStruct *firmwareStruct
 
 *///---------------------------------------------------------------------------
 #if(EEPROM_STORAGE_STYLE == EEP_OLD)
-	void IOTAppStory::addField(char* &defaultVal, const char *fieldLabel, const int length, const char type) {
+	void IOTAppStory::addField(char* &defaultVal, const char *fieldID, const char *fieldLabel, const int length, const char type) {
 		// get config from EEPROM
 		ConfigStruct config;
 		this->readConfig(config);
@@ -901,7 +901,7 @@ bool IOTAppStory::espInstaller(Stream &streamPtr, FirmwareStruct *firmwareStruct
 
 
 				#if DEBUG_LVL >= 2
-					DEBUG_PRINTF_P(PSTR(" %02d | %-30s | %03d | %04d to %04d | %-30s | "), this->_nrXF+1, fieldLabel, length, eepFieldStart, this->_nrXFlastAdd, defaultVal);
+					DEBUG_PRINTF_P(PSTR(" %02d | %-30s | %-30s | %03d | %04d to %04d | %-30s | "), this->_nrXF+1, fieldID, fieldLabel, length, eepFieldStart, this->_nrXFlastAdd, defaultVal);
 				#endif
 
 				// EEPROM begin
@@ -914,6 +914,7 @@ bool IOTAppStory::espInstaller(Stream &streamPtr, FirmwareStruct *firmwareStruct
 					#endif
 
 					// add values to the fieldstruct
+                    fieldStruct.fieldID     = fieldID;
 					fieldStruct.fieldLabel  = fieldLabel;
 					fieldStruct.length      = length;
 					fieldStruct.type        = type;
@@ -968,6 +969,17 @@ bool IOTAppStory::espInstaller(Stream &streamPtr, FirmwareStruct *firmwareStruct
 
 					bool putfieldStruct = false;
 
+					// compair EEPROM fieldID with the current fieldID
+					if(fieldStruct.fieldID != fieldID) {
+						// EEPROM value is NOT the same als the default value
+						#if DEBUG_LVL >= 2
+							DEBUG_PRINTLN("Overwritting ID");
+						#endif
+						// update the default value with the value from EEPROM
+						fieldStruct.fieldID  = fieldID;
+						putfieldStruct = true;
+					}
+
 					// compair EEPROM fieldLabel with the current fieldLabel
 					if(fieldStruct.fieldLabel != fieldLabel) {
 						// EEPROM value is NOT the same als the default value
@@ -979,7 +991,7 @@ bool IOTAppStory::espInstaller(Stream &streamPtr, FirmwareStruct *firmwareStruct
 						putfieldStruct = true;
 					}
 
-					// compair EEPROM fieldLabel with the current fieldLabel
+					// compair EEPROM length with the current length
 					if(fieldStruct.length != length) {
 						// EEPROM value is NOT the same als the default value
 						#if DEBUG_LVL >= 2
@@ -990,7 +1002,7 @@ bool IOTAppStory::espInstaller(Stream &streamPtr, FirmwareStruct *firmwareStruct
 						putfieldStruct = true;
 					}
 
-					// compair EEPROM fieldLabel with the current fieldLabel
+					// compair EEPROM fieldType with the current fieldType
 					if(fieldStruct.type != type) {
 						// EEPROM value is NOT the same als the default value
 						#if DEBUG_LVL >= 2
@@ -1023,7 +1035,7 @@ bool IOTAppStory::espInstaller(Stream &streamPtr, FirmwareStruct *firmwareStruct
 		}
 	}
 #else
-	void IOTAppStory::addField(char* &defaultVal, const char *fieldLabel, const int length, const char type) {
+	void IOTAppStory::addField(char* &defaultVal, const char *fieldID, const char *fieldLabel, const int length, const char type) {
 		// get config from EEPROM
 		ConfigStruct config;
 		this->readConfig(config);
@@ -1080,7 +1092,7 @@ bool IOTAppStory::espInstaller(Stream &streamPtr, FirmwareStruct *firmwareStruct
 			}else{
 
 				#if DEBUG_LVL >= 2
-					DEBUG_PRINTF_P(PSTR(" %02d | %-30s | %03d | %04d to %04d | %04d to %04d | %-30s | "), this->_nrXF+1, fieldLabel, length, eepFieldHdrStart, eepFieldHdrEnd, eepFieldValStart, eepFieldValEnd, defaultVal);
+					DEBUG_PRINTF_P(PSTR(" %02d | %-30s | %-30s | %03d | %04d to %04d | %04d to %04d | %-30s | "), this->_nrXF+1, fieldID, fieldLabel, length, eepFieldHdrStart, eepFieldHdrEnd, eepFieldValStart, eepFieldValEnd, defaultVal);
 				#endif
 
 				// EEPROM begin
@@ -1093,7 +1105,8 @@ bool IOTAppStory::espInstaller(Stream &streamPtr, FirmwareStruct *firmwareStruct
 					#endif
 
 					// add values to the fieldstruct
-					fieldStruct.fieldLabel  = fieldLabel;
+					fieldStruct.fieldID     = fieldID;
+                    fieldStruct.fieldLabel  = fieldLabel;
 					fieldStruct.length      = length;
 					fieldStruct.type        = type;
 
@@ -1147,6 +1160,17 @@ bool IOTAppStory::espInstaller(Stream &streamPtr, FirmwareStruct *firmwareStruct
 
 					bool putfieldStruct = false;
 
+					// compair EEPROM fieldID with the current fieldID
+					if(fieldStruct.fieldID != fieldID) {
+						// EEPROM value is NOT the same als the default value
+						#if DEBUG_LVL >= 2
+							DEBUG_PRINTLN("Overwritting ID");
+						#endif
+						// update the default value with the value from EEPROM
+						fieldStruct.fieldID  = fieldID;
+						putfieldStruct = true;
+					}
+
 					// compair EEPROM fieldLabel with the current fieldLabel
 					if(fieldStruct.fieldLabel != fieldLabel) {
 						// EEPROM value is NOT the same als the default value
@@ -1158,7 +1182,7 @@ bool IOTAppStory::espInstaller(Stream &streamPtr, FirmwareStruct *firmwareStruct
 						putfieldStruct = true;
 					}
 
-					// compair EEPROM fieldLabel with the current fieldLabel
+					// compair EEPROM length with the current length
 					if(fieldStruct.length != length) {
 						// EEPROM value is NOT the same als the default value
 						#if DEBUG_LVL >= 2
@@ -1169,7 +1193,7 @@ bool IOTAppStory::espInstaller(Stream &streamPtr, FirmwareStruct *firmwareStruct
 						putfieldStruct = true;
 					}
 
-					// compair EEPROM fieldLabel with the current fieldLabel
+					// compair EEPROM type with the current type
 					if(fieldStruct.type != type) {
 						// EEPROM value is NOT the same als the default value
 						#if DEBUG_LVL >= 2
@@ -2084,6 +2108,7 @@ bool IOTAppStory::servSaveWifiCred(const char* newSSID, const char* newPass, Str
 
 			// get PROGMEM json string and replace {*} with values
 			retHtml += FPSTR(HTTP_APP_INFO);
+			retHtml.replace(F("{I}"), String(fieldStruct.fieldID));
 			retHtml.replace(F("{l}"), String(fieldStruct.fieldLabel));
 			retHtml.replace(F("{v}"), value);
 			retHtml.replace(F("{n}"), String(i));
@@ -2163,6 +2188,7 @@ bool IOTAppStory::servSaveWifiCred(const char* newSSID, const char* newPass, Str
 
 			// get PROGMEM json string and replace {*} with values
 			retHtml += FPSTR(HTTP_APP_INFO);
+			retHtml.replace(F("{I}"), String(fieldStruct.fieldID));
 			retHtml.replace(F("{l}"), String(fieldStruct.fieldLabel));
 			retHtml.replace(F("{v}"), value);
 			retHtml.replace(F("{n}"), String(i));
