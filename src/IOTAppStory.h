@@ -209,7 +209,7 @@ public:
     void onFirstBoot(THandlerFunction fn);                  // called at the end of firstBoot
     void onModeButtonNoPress(THandlerFunction fn);          // called when state is changed to idle (mode button is not pressed)
     void onModeButtonVeryShortPress(THandlerFunction fn);   // called when state is changed to very short press
-    void onVeryShortRelease(THandlerFunction fn);           // called when button is released after a very short press
+    void onModeButtonVeryShortRelease(THandlerFunction fn); // called when button is released after a very short press
     void onModeButtonShortPress(THandlerFunction fn);       // called when state is changed to short press
     void onModeButtonLongPress(THandlerFunction fn);        // called when state is changed to long press
     void onModeButtonVeryLongPress(THandlerFunction fn);    // called when state is changed to very long press
