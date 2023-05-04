@@ -1106,7 +1106,7 @@ bool IOTAppStory::espInstaller(Stream &streamPtr, FirmwareStruct *firmwareStruct
 
 					// add values to the fieldstruct
 					fieldStruct.fieldID     = fieldID;
-                    fieldStruct.fieldLabel  = fieldLabel;
+					fieldStruct.fieldLabel  = fieldLabel;
 					fieldStruct.length      = length;
 					fieldStruct.type        = type;
 
@@ -1226,6 +1226,58 @@ bool IOTAppStory::espInstaller(Stream &streamPtr, FirmwareStruct *firmwareStruct
 			}
 		}
 	}
+
+	char* IOTAppStory::getField(const char *fieldID) {
+		// get config from EEPROM
+		ConfigStruct config;
+		this->readConfig(config);
+
+        // init fieldStruct
+        AddFieldStruct fieldStruct;
+        int eepFieldHdrStart = 0;
+
+        for (;;) {
+            // calculate EEPROM addresses
+            if(eepFieldHdrStart == 0) {
+                eepFieldHdrStart 		= FIELD_EEP_START_ADDR;
+            }
+
+            int eepFieldHdrEnd = eepFieldHdrStart + sizeof(fieldStruct);
+            int magicBytesBegin = eepFieldHdrEnd - 3;
+            int eepFieldValStart;
+            int eepFieldValEnd;
+
+            // EEPROM begin
+            EEPROM.begin(EEPROM_SIZE);
+
+            // check for MAGICEEP to see if another field exists or we've read the last one
+            if(EEPROM.read(magicBytesBegin) != MAGICEEP[0]) {
+                break;
+            } else {
+                // get the fieldStruct from EEPROM
+                EEPROM.get(eepFieldHdrStart, fieldStruct);
+
+                eepFieldValStart = eepFieldHdrEnd;
+                eepFieldValEnd = eepFieldValStart + fieldStruct.length + 1;
+
+                if (strcmp(fieldID, fieldStruct.fieldID) == 0) {
+                    // temp val buffer
+                    char eepVal[fieldStruct.length+1];
+
+                    // read field value from EEPROM and store it in eepVal buffer
+                    unsigned int ee = 0;
+                    for(unsigned int e=eepFieldValStart; e < eepFieldValEnd; e++) {
+                        eepVal[ee] = EEPROM.read(e);
+                        ee++;
+                    }
+                    char* returnString = (char*)eepVal;
+                    return returnString;
+                }
+            }
+            eepFieldHdrStart = eepFieldValEnd;
+        }
+	}
+
 #endif
 
 
@@ -1675,9 +1727,10 @@ ModeButtonState IOTAppStory::getModeButtonState() {
             if(!this->isModeButtonPressed()) {
                 if(this->_veryShortReleaseCallback) {
                     this->_veryShortReleaseCallback();
+                }
                 continue;
             }
-            return ModeButtonShortPress;
+            return ModeButtonVeryShortPress;
 
         case AppStateShortPress:
             if(buttonTime > MODE_BUTTON_LONG_PRESS) {
