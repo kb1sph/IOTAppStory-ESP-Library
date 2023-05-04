@@ -1816,6 +1816,14 @@ void IOTAppStory::onModeButtonVeryShortPress(THandlerFunction value) {
 }
 
 /*-----------------------------------------------------------------------------
+                        IOTAppStory onModeButtonVeryShortRelease
+
+*///---------------------------------------------------------------------------
+void IOTAppStory::onModeButtonVeryShortRelease(THandlerFunction value) {
+    this->_veryShortReleaseCallback = value;
+}
+
+/*-----------------------------------------------------------------------------
                         IOTAppStory onModeButtonShortPress
 
 *///---------------------------------------------------------------------------
